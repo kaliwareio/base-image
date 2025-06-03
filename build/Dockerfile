@@ -71,9 +71,18 @@ COPY --chown=0:1111 ./COPY_ROOT_0/ /
 ARG CUDA_STRING
 ARG ROCM_STRING
 
+# Define your preferred mirror
+ENV MIRROR_URL="https://mirror.enzu.com/ubuntu"
+
+
+
+
 # Use build scripts to ensure we can build all targets from one Dockerfile in a single layer.
 # Don't put anything heavy in here - We can use multi-stage building above if necessary.
-RUN yes | unminimize && \
+# Ubuntu URLs replaced temporarily due to: https://askubuntu.com/questions/1549622/problem-with-archive-ubuntu-com-most-of-the-servers-are-not-responding
+RUN sudo sed -i -E "s|http://[a-zA-Z0-9./-]*.ubuntu.com/ubuntu|${MIRROR_URL}|g" /etc/apt/sources.list && \
+    sudo sed -i -E "s|https://[a-zA-Z0-9./-]*.ubuntu.com/ubuntu|${MIRROR_URL}|g" /etc/apt/sources.list && \
+    yes | unminimize && \
     set -eo pipefail && /opt/ai-dock/bin/build/layer0/init.sh | tee /var/log/build.log
 
 # Keep init.sh as-is and place additional logic in /opt/ai-dock/bin/preflight.d
