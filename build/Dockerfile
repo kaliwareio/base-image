@@ -72,7 +72,7 @@ ARG CUDA_STRING
 ARG ROCM_STRING
 
 # Define your preferred mirror
-ENV MIRROR_URL="https://azure.archive.ubuntu.com/ubuntu"
+ENV MIRROR_URL="http://azure.archive.ubuntu.com/ubuntu"
 
 
 
